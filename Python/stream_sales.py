@@ -3,9 +3,15 @@ import json
 import pandas as pd
 import multiprocessing
 import datetime
-
+import boto3
 
 countries = ['US', 'UK', 'DE', 'FR', 'IT']
+
+# Initialize S3 client
+s3_client = boto3.client('s3') 
+
+# Define S3 bucket name
+bucket_name = 'raw-data-store-de-project-1'
 
 
 # List to store received records
@@ -14,7 +20,7 @@ records = []
 def stream(country):
 
     consumer_config = {
-    'bootstrap.servers': '34.228.25.149:9092',
+    'bootstrap.servers': '100.26.47.74:9092',
     'group.id': f"{country}_consumer-group",
     'auto.offset.reset': 'earliest'
     }
@@ -28,7 +34,6 @@ def stream(country):
 
     record_count = 0
     data_file = f"../Inbound/{country}/{country}_{datetime.datetime.now().strftime("%Y%m%dT%H%M%S")}.csv"
-    #data_file =  open(f"../nbound/{data_file_name}")
 
     try:
         while True:
@@ -48,6 +53,7 @@ def stream(country):
             record_count+=1
             df = pd.DataFrame([record])
             if record_count % 100 == 0:
+                s3_client.upload_file(data_file, bucket_name, data_file[3:])  # Upload to S3, removing '../' from the path
                 data_file = f"../Inbound/{country}/{country}_{datetime.datetime.now().strftime("%Y%m%dT%H%M%S")}.csv"
 
             df.to_csv(data_file, mode='a', index=False, header=False)
@@ -58,13 +64,15 @@ def stream(country):
     except KeyboardInterrupt:
         pass
     finally:
+       s3_client.upload_file(data_file, bucket_name, data_file[3:])  # Upload to S3, removing '../' from the path
        consumer.close()
 
+""" 
 # Convert received records to DataFrame
 received_df = pd.DataFrame(records)
 print("\nReceived DataFrame:")
 print(received_df)
-
+"""
 
 # Create consumers and subscribe to the topics
 processes = [None]*len(countries)

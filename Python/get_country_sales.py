@@ -35,7 +35,7 @@ def send_sales(country_code, products, product_sale_frequency, overall_sale_freq
 
     # Kafka consumer configuration
     kafka_config = {
-    'bootstrap.servers': '34.228.25.149:9092'
+    'bootstrap.servers': '100.26.47.74:9092'
     }
 
     # Create Kafka producer
