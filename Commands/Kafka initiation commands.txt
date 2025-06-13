@@ -1,0 +1,27 @@
+1. Start zookeeper
+sudo /opt/kafka/bin/zookeeper-server-start.sh -daemon /opt/kafka/config/zookeeper.properties
+
+2. Verify ZooKeeper is running:
+netstat -tuln | grep 2181
+
+3. Start kafka server
+sudo /opt/kafka/bin/kafka-server-start.sh -daemon /opt/kafka/config/server.properties
+
+4. Verify kafka is running
+netstat -tuln | grep 9092
+
+
+
+Additional commands
+
+1. list topics
+/opt/kafka/bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
+2. Stop zookeeper
+sudo /opt/kafka/bin/zookeeper-server-stop.sh -daemon /opt/kafka/config/zookeeper.properties
+
+3. Stop kafka server
+sudo /opt/kafka/bin/kafka-server-stop.sh -daemon /opt/kafka/config/server.properties
+
+4. Delete kafka topic
+/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic DE_topic
