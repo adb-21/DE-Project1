@@ -20,7 +20,7 @@ records = []
 def stream(country):
 
     consumer_config = {
-    'bootstrap.servers': '100.26.47.74:9092',
+    'bootstrap.servers': '54.89.161.97:9092',
     'group.id': f"{country}_consumer-group",
     'auto.offset.reset': 'earliest'
     }
@@ -45,7 +45,7 @@ def stream(country):
                 if msg.error().code() == KafkaError._PARTITION_EOF:
                     print('partition error')
                     continue
-                else:
+                else: 
                    print(f'Error: {msg.error()}')
                    break
             # Decode and parse JSON message
