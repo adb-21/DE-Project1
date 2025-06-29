@@ -50,7 +50,7 @@ def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, cou
     
     try:
         # List objects in the S3 bucket with the given prefix
-        response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=prefix + country + '/')
+        response = s3_client.list_objects_v2(Bucket=bucket_name, Prefix=prefix + country + '/', Delimiter='/')
 
         if 'Contents' not in response:
             print(f"No files found in bucket {bucket_name} with prefix {prefix + country + '/'}")
@@ -60,7 +60,7 @@ def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, cou
         for obj in response['Contents']:
             file_key = obj['Key']
             print( f"Found file: {file_key}")
-            if file_key.endswith('.csv') and file_key.startswith(country):
+            if file_key.endswith('.csv') and file_key[len(file_key)-(len(country) + 20):].startswith(country):
                 print(f"Processing file: {file_key}")
                 csv_reader = read_csv_from_s3(bucket_name, file_key)
                 
