@@ -28,7 +28,7 @@ def read_csv_from_s3(bucket_name, file_key):
 
 def write_to_dynamodb(table_name, rows, field_names):
     """Write items to DynamoDB table"""
-    dynamodb = boto3.resource('dynamodb')
+    dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  
     table = dynamodb.Table(table_name)
     
     for row in rows:
