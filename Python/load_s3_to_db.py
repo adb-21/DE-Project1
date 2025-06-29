@@ -5,9 +5,6 @@ from botocore.exceptions import ClientError
 from decimal import Decimal
 import json
 
-countries = ['US', 'UK', 'DE', 'FR', 'IT']
-
-
 def convert_to_dynamodb_type(value):
     """Convert Python types to DynamoDB compatible types"""
     if isinstance(value, (int, float)):
@@ -73,14 +70,17 @@ def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, cou
         print(f"Error listing S3 objects: {e}")
 
 if __name__ == "__main__":
-    # Configuration - replace these values with your own
+    # List of countries to process
+    countries = ['US', 'UK', 'DE', 'FR', 'IT']
+
+    # Configuration
     S3_BUCKET_NAME = 'raw-data-store-de-project-1'
-    S3_PREFIX = 'Inbound/'  # Optional: folder path in bucket
-    DYNAMODB_TABLE_NAME = 'your-dynamodb-table-name'
+    S3_PREFIX = 'Inbound/'  
+    DYNAMODB_TABLE_NAME = 'stage.sales' 
     
-    # Define field names for your CSV columns (replace with actual column names)
-    FIELD_NAMES = ['product_code', 'country_of_sale', 'datetime', 'selling_price', 'currency']  # Adjust based on your CSV structure
-    
+    # Define field names for your CSV columns
+    FIELD_NAMES = ['sale_id', 'product_code', 'country_of_sale', 'datetime', 'selling_price', 'currency']
+
     # Process CSV files
     for country in countries:
         process_s3_csv_to_dynamodb(S3_BUCKET_NAME, S3_PREFIX, DYNAMODB_TABLE_NAME, FIELD_NAMES, country)
