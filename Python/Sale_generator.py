@@ -5,7 +5,7 @@ import time
 
 def generate_sales(country_code, products, product_sale_frequencies, overall_sale_frequency,
                     selling_price_range, currencies):
-    df = pd.DataFrame(columns=['product_code', 'country_of_sale', 'datetime', 'selling_price', 'currency'])
+    df = pd.DataFrame(columns=['sale_id', 'product_code', 'country_of_sale', 'datetime', 'selling_price', 'currency'])
     for product_code in products:
     
         for i in range(int(product_sale_frequencies[product_code] * 100 * overall_sale_frequency * random.randint(1, 5))):
