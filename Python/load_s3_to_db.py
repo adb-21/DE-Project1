@@ -40,8 +40,9 @@ def write_to_dynamodb(table_name, rows, field_names):
         
         try:
             table.put_item(Item=item)
-            print(f"Successfully inserted item: {json.dumps(item, default=str)}")
+            #print(f"Successfully inserted item: {json.dumps(item, default=str)}")
         except ClientError as e:
+            #Store the item that failed to insert in s3 for later review
             print(f"Error writing to DynamoDB: {e}")
 
 def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, country):
@@ -66,6 +67,16 @@ def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, cou
                 
                 if csv_reader:
                     write_to_dynamodb(table_name, csv_reader, field_names)
+
+                    # After processing, copy the file to a 'Processed' folder and delete the original
+                    s3_client.copy_object(
+                        Bucket=bucket_name,
+                        CopySource={'Bucket': bucket_name, 'Key': file_key},
+                        Key=prefix + country + '/Processed/' + file_key.split('/')[-1]  # Copy file to Processed folder
+                    )
+
+                    # Delete the original file
+                    s3_client.delete_object(Bucket=bucket_name, Key=file_key)  # Delete file after processing
                 
     except ClientError as e:
         print(f"Error listing S3 objects: {e}")

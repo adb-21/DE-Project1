@@ -20,7 +20,7 @@ records = []
 def stream(country):
 
     consumer_config = {
-    'bootstrap.servers': '54.89.161.97:9092',
+    'bootstrap.servers': '54.82.6.85:9092',
     'group.id': f"{country}_consumer-group",
     'auto.offset.reset': 'earliest'
     }
