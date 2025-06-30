@@ -59,8 +59,6 @@ def stream(country):
 
             df.to_csv(data_file, mode='a', index=False, header=False)
             
-            #records.append(record)
-            #print(f'Received: {record}')
 
     except KeyboardInterrupt:
         pass
