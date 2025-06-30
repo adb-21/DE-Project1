@@ -55,6 +55,13 @@ def stream(country):
             df = pd.DataFrame([record])
             if record_count % 100 == 0:
                 s3_client.upload_file(data_file, bucket_name, data_file[3:])  # Upload to S3, removing '../' from the path
+                
+                # Move the file to a Archived folder
+                temp = data_file.split('/')
+                archived_file = '/'.join(temp[:-1]) + '/Archived/' + temp[-1]
+                shutil.move(data_file, archived_file)
+
+                # Create a new data file for the next batch
                 data_file = f"../Inbound/{country}/{country}_{datetime.datetime.now().strftime('%Y%m%dT%H%M%S')}.csv"
 
             df.to_csv(data_file, mode='a', index=False, header=False)
