@@ -61,7 +61,7 @@ def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, cou
         for obj in response['Contents']:
             file_key = obj['Key']
             print( f"Found file: {file_key}")
-            if file_key.endswith('.csv') and file_key[len(file_key)-(len(country) + 20):].startswith(country):
+            if file_key.endswith('.csv') and file_key[len(file_key)-(len(country) + 26):].startswith(country):
                 print(f"Processing file: {file_key}")
                 csv_reader = read_csv_from_s3(bucket_name, file_key)
                 

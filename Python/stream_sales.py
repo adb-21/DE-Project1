@@ -34,7 +34,7 @@ def stream(country):
     consumer.subscribe([topic])
 
     record_count = 0
-    data_file = f"../Inbound/{country}/{country}_{datetime.datetime.now().strftime("%Y%m%dT%H%M%S")}.csv"
+    data_file = f"../Inbound/{country}/{country}_{datetime.datetime.now().strftime('%Y%m%dT%H%M%S%f')}.csv"
 
     try:
         while True:
@@ -62,7 +62,7 @@ def stream(country):
                 shutil.move(data_file, archived_file)
 
                 # Create a new data file for the next batch
-                data_file = f"../Inbound/{country}/{country}_{datetime.datetime.now().strftime('%Y%m%dT%H%M%S')}.csv"
+                data_file = f"../Inbound/{country}/{country}_{datetime.datetime.now().strftime('%Y%m%dT%H%M%S%f')}.csv"
 
             df.to_csv(data_file, mode='a', index=False, header=False)
             
