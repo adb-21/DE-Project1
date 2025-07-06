@@ -4,6 +4,9 @@ import io
 from botocore.exceptions import ClientError
 from decimal import Decimal
 import json
+from datetime import datetime
+from airflow import DAG
+from airflow.operators.python import PythonOperator
 
 def convert_to_dynamodb_type(value):
     """Convert Python types to DynamoDB compatible types"""
@@ -92,8 +95,28 @@ if __name__ == "__main__":
     
     # Define field names for your CSV columns
     FIELD_NAMES = ['sale_id', 'product_code', 'country_of_sale', 'datetime', 'selling_price', 'currency']
-
+    """""
     # Process CSV files
     for country in countries:
         process_s3_csv_to_dynamodb(S3_BUCKET_NAME, S3_PREFIX, DYNAMODB_TABLE_NAME, FIELD_NAMES, country)
+    """
 
+    with DAG(dag_id ='load_s3_to_db', 
+            default_args={'owner': 'airflow', 'start_date': datetime(2023, 10, 1)}, 
+            schedule_interval='@daily') as dag:
+        for country in countries:
+            task = PythonOperator(
+                task_id=f'process_{country}_sales',
+                python_callable=process_s3_csv_to_dynamodb,
+                op_kwargs={
+                    'bucket_name': S3_BUCKET_NAME,
+                    'prefix': S3_PREFIX,
+                    'table_name': DYNAMODB_TABLE_NAME,
+                    'field_names': FIELD_NAMES,
+                    'country': country
+                }
+            )
+
+            if previous_task is not None:
+                previous_task >> task
+            previous_task = task
