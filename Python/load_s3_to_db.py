@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
     with DAG(dag_id ='load_s3_to_db', 
             default_args={'owner': 'airflow', 'start_date': datetime(2023, 10, 1)}, 
-            schedule_interval='@daily') as dag:
+            schedule_interval=None) as dag:
         for country in countries:
             task = PythonOperator(
                 task_id=f'process_{country}_sales',
