@@ -87,39 +87,39 @@ def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, cou
     except ClientError as e:
         print(f"Error listing S3 objects: {e}")
 
-if __name__ == "__main__":
-    # List of countries to process
-    countries = ['US', 'UK', 'DE', 'FR', 'IT']
 
-    # Configuration
-    S3_BUCKET_NAME = 'raw-data-store-de-project-1'
-    S3_PREFIX = 'Inbound/'  
-    DYNAMODB_TABLE_NAME = 'stage.sales' 
-    
-    # Define field names for your CSV columns
-    FIELD_NAMES = ['sale_id', 'product_code', 'country_of_sale', 'datetime', 'selling_price', 'currency']
-    """""
-    # Process CSV files
+# List of countries to process
+countries = ['US', 'UK', 'DE', 'FR', 'IT']
+
+# Configuration
+S3_BUCKET_NAME = 'raw-data-store-de-project-1'
+S3_PREFIX = 'Inbound/'  
+DYNAMODB_TABLE_NAME = 'stage.sales' 
+
+# Define field names for your CSV columns
+FIELD_NAMES = ['sale_id', 'product_code', 'country_of_sale', 'datetime', 'selling_price', 'currency']
+"""""
+# Process CSV files
+for country in countries:
+    process_s3_csv_to_dynamodb(S3_BUCKET_NAME, S3_PREFIX, DYNAMODB_TABLE_NAME, FIELD_NAMES, country)
+"""
+
+with DAG(dag_id ='load_s3_to_db', 
+        default_args={'owner': 'airflow', 'start_date': datetime(2023, 10, 1)}, 
+        schedule_interval=None) as dag:
     for country in countries:
-        process_s3_csv_to_dynamodb(S3_BUCKET_NAME, S3_PREFIX, DYNAMODB_TABLE_NAME, FIELD_NAMES, country)
-    """
+        task = PythonOperator(
+            task_id=f'process_{country}_sales',
+            python_callable=process_s3_csv_to_dynamodb,
+            op_kwargs={
+                'bucket_name': S3_BUCKET_NAME,
+                'prefix': S3_PREFIX,
+                'table_name': DYNAMODB_TABLE_NAME,
+                'field_names': FIELD_NAMES,
+                'country': country
+            }
+        )
 
-    with DAG(dag_id ='load_s3_to_db', 
-            default_args={'owner': 'airflow', 'start_date': datetime(2023, 10, 1)}, 
-            schedule_interval=None) as dag:
-        for country in countries:
-            task = PythonOperator(
-                task_id=f'process_{country}_sales',
-                python_callable=process_s3_csv_to_dynamodb,
-                op_kwargs={
-                    'bucket_name': S3_BUCKET_NAME,
-                    'prefix': S3_PREFIX,
-                    'table_name': DYNAMODB_TABLE_NAME,
-                    'field_names': FIELD_NAMES,
-                    'country': country
-                }
-            )
-
-            if previous_task is not None:
-                previous_task >> task
-            previous_task = task
+        if previous_task is not None:
+            previous_task >> task
+        previous_task = task
