@@ -1,1 +1,2 @@
-
+1. The public ip addresss of host server is updated in kafka config file
+2. The ip address is updated in stream_sales.py and get_country_sales.py
