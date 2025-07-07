@@ -33,7 +33,7 @@ def write_to_dynamodb(table_name, rows, field_names):
     """Write items to DynamoDB table"""
     dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  
     table = dynamodb.Table(table_name)
-    
+    item_count = 0
     for row in rows:
         # Map row values to field names
         if len(row) != len(field_names):
@@ -43,10 +43,13 @@ def write_to_dynamodb(table_name, rows, field_names):
         
         try:
             table.put_item(Item=item)
+            item_count += 1
             #print(f"Successfully inserted item: {json.dumps(item, default=str)}")
         except ClientError as e:
             #Store the item that failed to insert in s3 for later review
             print(f"Error writing to DynamoDB: {e}")
+
+    #return item_count
 
 def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, country):
     """Process all CSV files in S3 bucket and store in DynamoDB"""
