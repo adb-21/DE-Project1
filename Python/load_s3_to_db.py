@@ -107,6 +107,9 @@ for country in countries:
 with DAG(dag_id ='load_s3_to_db', 
         default_args={'owner': 'airflow', 'start_date': datetime(2023, 10, 1)}, 
         schedule_interval=None) as dag:
+    
+    previous_task = None
+    # Create a task for each country
     for country in countries:
         task = PythonOperator(
             task_id=f'process_{country}_sales',
