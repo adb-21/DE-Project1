@@ -1,0 +1,8 @@
+#Ignore Python bytecode files
+DE-Project1/Python/__pycache__/
+
+#Ignore Inbound folder
+DE-Project1/Inbound/
+
+#Ignore logs folder
+DE-Project1/logs/
