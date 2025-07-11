@@ -43,7 +43,7 @@ def move_to_archived(file_path):
 def stream(country):
 
     consumer_config = {
-    'bootstrap.servers': '75.101.201.118:9092',
+    'bootstrap.servers': '54.90.90.125:9092',
     'group.id': f"{country}_consumer-group",
     'auto.offset.reset': 'earliest'
     }
@@ -84,7 +84,7 @@ def stream(country):
             record = json.loads(msg.value().decode('utf-8'))
             record_count+=1
             df = pd.DataFrame([record])
-            if record_count % 100 == 0:
+            if record_count % 10_000 == 0:
 
                 # Upload the data file to S3
                 upload_to_s3(data_file, bucket_name)

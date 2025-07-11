@@ -21,7 +21,7 @@ def generate_sales(country_code, products, product_sale_frequencies, overall_sal
                 'selling_price': selling_price,
                 'currency': currency
             }
-            time.sleep(0.0001)  # Adjust the sleep time as needed to control the
+            time.sleep(0.0001)  # Adjust the sleep time as needed to control the rate of sales generation
 
     
     return df
