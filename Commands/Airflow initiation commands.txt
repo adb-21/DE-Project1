@@ -4,10 +4,11 @@ deactivate
 2. Activate the environment where airflow is configured
 source ~/airflow_env/bin/activate
 
-3. airflow db init
+3. Initiate airflow db (Required only for initial database setup)
+airflow db init
 
 4. Start webserver
 airflow webserver
 
-5. Start scheduler (in New shell)
+5. Start scheduler (in New shell and activating airflow environment)
 airflow scheduler

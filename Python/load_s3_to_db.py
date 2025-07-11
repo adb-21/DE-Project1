@@ -40,7 +40,7 @@ def write_to_dynamodb(table_name, rows, field_names):
             print(f"Skipping row with mismatched columns: {row}")
             continue
         item = {field_names[i]: convert_to_dynamodb_type(value) for i, value in enumerate(row)}
-        
+
         try:
             table.put_item(Item=item)
             item_count += 1
@@ -49,7 +49,7 @@ def write_to_dynamodb(table_name, rows, field_names):
             #Store the item that failed to insert in s3 for later review
             print(f"Error writing to DynamoDB: {e}")
 
-    #return item_count
+    return item_count
 
 def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, country):
     """Process all CSV files in S3 bucket and store in DynamoDB"""
@@ -73,7 +73,13 @@ def process_s3_csv_to_dynamodb(bucket_name, prefix, table_name, field_names, cou
                 
                 if csv_reader:
                     write_to_dynamodb(table_name, csv_reader, field_names)
-
+                    """Need to work
+                    rows_written = write_to_dynamodb(table_name, csv_reader, field_names)
+                    # Save the number of items written to csv
+                    with open(f"processed_{country}.csv", "a") as f:
+                        f.write(f"{file_key},{rows_written},{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')} \n")
+                    f.close()
+                    """
                     # After processing, copy the file to a 'Processed' folder and delete the original
                     s3_client.copy_object(
                         Bucket=bucket_name,
