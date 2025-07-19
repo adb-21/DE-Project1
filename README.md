@@ -15,7 +15,7 @@ The pipeline runs on an AWS EC2 instance running Ubuntu, leveraging multiprocess
 
 ## Prerequisites
 - **AWS Account**: Access to AWS services (S3, DynamoDB, EC2).
-- **Apache Kafka**: A running Kafka instance (e.g., hosted on EC2 with broker.
+- **Apache Kafka**: A running Kafka instance (e.g., hosted on EC2 with broker).
 - **Apache Airflow**: Installed and configured on the EC2 instance.
 - **Python**: Version 3.8+ with required libraries (`pandas`, `boto3`, `confluent-kafka`, `airflow`).
 - **EC2 Instance**: Ubuntu-based instance with sufficient resources to run Kafka, Airflow, and Python scripts.
