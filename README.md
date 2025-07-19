@@ -15,7 +15,7 @@ The pipeline runs on an AWS EC2 instance running Ubuntu, leveraging multiprocess
 
 ## Prerequisites
 - **AWS Account**: Access to AWS services (S3, DynamoDB, EC2).
-- **Apache Kafka**: A running Kafka instance (e.g., hosted on EC2 with broker at `54.90.90.125:9092`).
+- **Apache Kafka**: A running Kafka instance (e.g., hosted on EC2 with broker.
 - **Apache Airflow**: Installed and configured on the EC2 instance.
 - **Python**: Version 3.8+ with required libraries (`pandas`, `boto3`, `confluent-kafka`, `airflow`).
 - **EC2 Instance**: Ubuntu-based instance with sufficient resources to run Kafka, Airflow, and Python scripts.
@@ -43,7 +43,7 @@ The project includes the following Python scripts:
 
 2. **Install and Configure Apache Kafka**:
    - Install Kafka on the EC2 instance or use an existing Kafka cluster.
-   - Ensure the Kafka broker is accessible at `54.90.90.125:9092`.
+   - Ensure the Kafka broker is accessible on server at port `9092`.
    - Create topics for each country (`US_topic`, `UK_topic`, `DE_topic`, `FR_topic`, `IT_topic`).
 
 3. **Configure AWS Credentials**:
@@ -105,7 +105,7 @@ The project includes the following Python scripts:
 ## Configuration Details
 - **Countries**: `US`, `UK`, `DE`, `FR`, `IT`.
 - **Products**: 10 products (`p1` to `p10`) with predefined sale frequencies and price ranges (see `publish_sales.py`).
-- **Kafka**: Broker at `54.90.90.125:9092` with topics named `<country>_topic`.
+- **Kafka**: Broker at om the server at port `9092` with topics named `<country>_topic`.
 - **S3**: Bucket `raw-data-store-de-project-1` with prefix `Inbound/<country>/`.
 - **DynamoDB**: Table `stage.sales` with fields matching the CSV structure.
 - **Airflow**: DAG `load_s3_to_db` runs tasks sequentially for each country.
@@ -127,3 +127,7 @@ The project includes the following Python scripts:
 - Add error handling and retry logic for failed S3 uploads or DynamoDB writes.
 - Enhance logging to track failed records in `load_s3_to_db.py`.
 - Add monitoring and alerting for pipeline failures using Airflow or AWS CloudWatch.
+
+## Development in progress
+- Designing a data warehouse and a connecting pipeline between the warehouse and DynamoDB.
+- A visualization with KPIs displaying analysis of data. 
