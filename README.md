@@ -11,6 +11,11 @@ The pipeline consists of the following components:
 4. **Data Loading to DynamoDB**: An Airflow DAG (`load_s3_to_db.py`) reads the CSV files from S3 and loads the data into an AWS DynamoDB table.
 5. **Orchestration**: Apache Airflow schedules and manages the pipeline execution.
 
+The following diagram shows the overall flow of the data streaming pipeline:
+![Architecture](/misc/HLD.png)
+
+[View Project Details](/misc/LLD.svg)
+
 The pipeline runs on an AWS EC2 instance running Ubuntu, leveraging multiprocessing for parallel processing of data by country.
 
 ## Prerequisites
