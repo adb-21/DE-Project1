@@ -14,7 +14,7 @@ The pipeline consists of the following components:
 The following diagram shows the overall flow of the data streaming pipeline:
 ![Architecture](/misc/HLD.png)
 
-[View Project Details](/misc/LLD.svg)
+[View Detailed Design](/misc/LLD.svg)
 
 The pipeline runs on an AWS EC2 instance running Ubuntu, leveraging multiprocessing for parallel processing of data by country.
 
